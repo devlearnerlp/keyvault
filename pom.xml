@@ -14,7 +14,7 @@
 	<name>keyvault</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 		<azure.version>3.10.0</azure.version>
 	</properties>
 	<dependencies>
