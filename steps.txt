@@ -1,0 +1,52 @@
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "0dccbced-d942-4eb4-92f6-1f845c629bcd",
+    "id": "f87aaef8-047b-488d-bf1c-b9837e226a9f",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "Free Trial",
+    "state": "Enabled",
+    "tenantId": "0dccbced-d942-4eb4-92f6-1f845c629bcd",
+    "user": {
+      "cloudShellID": true,
+      "name": "live.com#abdulmuheed.a@gmail.com",
+      "type": "user"
+    }
+  }
+]
+
+
+az account set -s f87aaef8-047b-488d-bf1c-b9837e226a9f
+
+az ad sp create-for-rbac --name contososp --role Contributor
+{
+  "appId": "546a6ab8-9e04-4d99-9b5b-864aab0487eb",
+  "displayName": "contososp",
+  "name": "546a6ab8-9e04-4d99-9b5b-864aab0487eb",
+  "password": "33e2oMJ7kmkZO~6GuNE-~JwM~mCgPYJWSI",
+  "tenant": "0dccbced-d942-4eb4-92f6-1f845c629bcd"
+}
+
+az account list-locations --output table
+
+az group create --name contosorg --location eastus
+
+
+az keyvault create \
+    --resource-group contosorg \
+    --name contosokvcicd9 \
+    --enabled-for-deployment true \
+    --enabled-for-disk-encryption true \
+    --enabled-for-template-deployment true \
+    --location eastus \
+    --query properties.vaultUri \
+    --sku standard
+
+"https://contosokvcicd9.vault.azure.net/"
+
+az keyvault set-policy --name contosokvcicd9 --spn 546a6ab8-9e04-4d99-9b5b-864aab0487eb --secret-permissions get list
+
+az keyvault secret set --name "connectionString" \
+    --vault-name "contosokvcicd9" \
+    --value "jdbc:sqlserver://SERVER.database.windows.net:1433;database=DATABASE;"
